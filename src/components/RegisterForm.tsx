@@ -78,14 +78,14 @@ const RegisterForm: React.FC = () => {
           </div>
         )}
         {success && (
-          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4 transition-opacity duration-500">
             {success}
           </div>
         )}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="fname" className="block mb-1 text-sm text-gray-600">
-              First Name
+              First name
             </label>
             <input
               type="text"
@@ -99,7 +99,7 @@ const RegisterForm: React.FC = () => {
           </div>
           <div className="mb-4">
             <label htmlFor="lname" className="block mb-1 text-sm text-gray-600">
-              Last Name
+              Last name
             </label>
             <input
               type="text"
@@ -133,7 +133,7 @@ const RegisterForm: React.FC = () => {
           </button>
         </form>
         <p className="mt-4 text-sm text-center text-gray-600">
-          Have an account?{" "}
+          Do you have an account?{" "}
           <Link to="/login" className="text-blue-600 hover:underline">
             Login here
           </Link>

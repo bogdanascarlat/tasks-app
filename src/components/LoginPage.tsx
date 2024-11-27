@@ -28,7 +28,7 @@ const LoginPage: React.FC = () => {
       return;
     }
 
-    // Check for existing account
+    // Check if the account exists
     const account = storedAccounts.find((acc) => acc.email === email);
 
     if (account) {
@@ -64,7 +64,7 @@ const LoginPage: React.FC = () => {
           </div>
           <button
             type="submit"
-            className="w-full py-2 px-4 text-white bg-blue-600 rounded hover:bg-blue-700 focus:outline-none"
+            className="w-full py-2 px-4 text-white bg-blue-600 rounded hover:bg-blue-700 hover:scale-105 transition duration-200 focus:outline-none"
           >
             Login
           </button>

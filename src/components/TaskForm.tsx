@@ -4,6 +4,7 @@ import { Task } from "../types/types";
 import { useParams, useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { useTasks } from "../hooks/useTasks";
+import { motion } from "framer-motion";
 
 const TaskForm: React.FC = () => {
   const { tasks, addTask, updateTask } = useTasks();
@@ -15,6 +16,8 @@ const TaskForm: React.FC = () => {
     title: "",
     description: "",
     createDate: "",
+    completed: false,
+    priority: "Medium", 
   });
 
   const [saving, setSaving] = useState(false);
@@ -32,7 +35,7 @@ const TaskForm: React.FC = () => {
   }, [id, tasks]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setError(null);
@@ -78,22 +81,43 @@ const TaskForm: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-8">
-      <div className="w-full max-w-lg p-8 bg-white rounded-lg shadow-lg">
+    <motion.div
+      className="flex items-center justify-center min-h-screen bg-gray-100 px-8"
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
+    >
+      <motion.div
+        className="w-full max-w-lg p-8 bg-white rounded-lg shadow-lg"
+        initial={{ y: 30, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
         <h2 className="text-3xl font-bold text-center text-gray-700 mb-6">
           {id ? "Edit Task" : "Create Task"}
         </h2>
 
-        {/* Success and Error Messages */}
+        {/* Success and error messages */}
         {success && (
-          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+          <motion.div
+            className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
             {success}
-          </div>
+          </motion.div>
         )}
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          <motion.div
+            className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
             {error}
-          </div>
+          </motion.div>
         )}
 
         <form onSubmit={handleSubmit}>
@@ -133,8 +157,28 @@ const TaskForm: React.FC = () => {
             ></textarea>
           </div>
 
-          <div className="flex gap-4">
-            <button
+          <div className="mb-4">
+            <label
+              htmlFor="priority"
+              className="block text-sm font-medium text-gray-600 mb-2"
+            >
+              Priority
+            </label>
+            <select
+              id="priority"
+              name="priority"
+              value={formData.priority}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            >
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
+
+          <motion.div className="flex gap-4">
+            <motion.button
               type="submit"
               className={`w-full py-2 text-white rounded-lg ${
                 saving
@@ -142,20 +186,24 @@ const TaskForm: React.FC = () => {
                   : "bg-green-500 hover:bg-green-600"
               }`}
               disabled={saving}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               {saving ? "Saving..." : "Save"}
-            </button>
-            <button
+            </motion.button>
+            <motion.button
               type="button"
               onClick={handleCancel}
               className="w-full py-2 text-white bg-gray-400 hover:bg-gray-500 rounded-lg"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               Cancel
-            </button>
-          </div>
+            </motion.button>
+          </motion.div>
         </form>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

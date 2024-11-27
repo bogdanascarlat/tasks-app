@@ -1,15 +1,12 @@
 /* eslint-disable react-refresh/only-export-components */
-import React, {
-  createContext,
-  useState,
-  useEffect,
-  useCallback,
-} from "react";
+import React, { createContext, useState, useEffect, useCallback } from "react";
 import { Task, TasksContextProps } from "../types/types";
 import { useAuth } from "../hooks/useAuth";
 
 // Create the context for managing tasks
-export const TasksContext = createContext<TasksContextProps | undefined>(undefined);
+export const TasksContext = createContext<TasksContextProps | undefined>(
+  undefined
+);
 
 export const TasksProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -87,10 +84,26 @@ export const TasksProvider: React.FC<{ children: React.ReactNode }> = ({
     });
   }, []);
 
+  // Toggle task completion
+  const toggleTaskCompletion = useCallback((id: string) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, completed: !task.completed } : task
+      )
+    );
+  }, []);
+
   // Provide the tasks and task-related functions to child components
   return (
     <TasksContext.Provider
-      value={{ tasks, loading, addTask, updateTask, deleteTask }}
+      value={{
+        tasks,
+        loading,
+        addTask,
+        updateTask,
+        deleteTask,
+        toggleTaskCompletion,
+      }}
     >
       {children}
     </TasksContext.Provider>

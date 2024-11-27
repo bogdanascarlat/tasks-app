@@ -1,7 +1,7 @@
 import React from "react";
 import { ConfirmationModalProps } from "../types/types";
 
-// Confirm logout modal
+// Confirmation logout modal
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   isOpen,
   title = "Confirm",

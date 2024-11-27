@@ -9,6 +9,8 @@ export interface Task {
   title: string;
   description?: string;
   createDate: string;
+  completed: boolean; 
+  priority: "High" | "Medium" | "Low";
 }
 
 export interface ConfirmationModalProps {
@@ -27,11 +29,13 @@ export interface TasksContextProps {
   addTask: (task: Task) => Promise<void>;
   updateTask: (task: Task) => Promise<void>;
   deleteTask: (id: string) => Promise<void>;
+  toggleTaskCompletion: (id: string) => void;
 }
 
 export interface TaskItemProps {
   task: Task;
   onDelete: (id: string) => void;
+  onToggle: () => void; 
 }
 
 export interface SearchBarProps {
