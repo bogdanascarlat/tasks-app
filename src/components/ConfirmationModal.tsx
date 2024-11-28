@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect, memo } from "react";
 import { ConfirmationModalProps } from "../types/types";
+import Button from "./Button";
 
-// Confirmation logout modal
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   isOpen,
   title = "Confirm",
@@ -11,6 +11,17 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   onConfirm,
   onCancel,
 }) => {
+  // Handle keyboard events
+  useEffect(() => {
+    const handleKeydown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen) {
+        onCancel();
+      }
+    };
+    window.addEventListener("keydown", handleKeydown);
+    return () => window.removeEventListener("keydown", handleKeydown);
+  }, [isOpen, onCancel]);
+
   if (!isOpen) return null;
 
   return (
@@ -19,22 +30,17 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
         <h2 className="text-xl font-semibold mb-4">{title}</h2>
         <p className="mb-6">{message}</p>
         <div className="flex justify-end space-x-4">
-          <button
-            onClick={onCancel}
-            className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 focus:outline-none"
-          >
+          <Button type="submit" variant="secondary" onClick={onCancel}>
             {cancelText}
-          </button>
-          <button
-            onClick={onConfirm}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none"
-          >
+          </Button>
+
+          <Button type="submit" variant="danger" onClick={onConfirm}>
             {confirmText}
-          </button>
+          </Button>
         </div>
       </div>
     </div>
   );
 };
 
-export default ConfirmationModal;
+export default memo(ConfirmationModal);

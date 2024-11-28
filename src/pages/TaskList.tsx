@@ -1,10 +1,12 @@
 import React, { useState, useMemo } from "react";
-import TaskItem from "./TaskItem";
-import SearchBar from "./SearchBar";
+import TaskItem from "../components/TaskItem";
+import SearchBar from "../components/SearchBar";
 import { Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { useTasks } from "../hooks/useTasks";
 import { motion, AnimatePresence } from "framer-motion";
+import ProfileIcon from "../assets/icons/ProfileIcon";
+import DropdownArrowIcon from "../assets/icons/DropdownArrowIcon";
 
 const TaskList: React.FC = () => {
   const { tasks, loading, deleteTask, updateTask } = useTasks();
@@ -74,7 +76,6 @@ const TaskList: React.FC = () => {
 
   return (
     <div className="max-w-6xl mx-auto py-10 px-6 bg-gray-50 min-h-screen">
-      {/* Header section */}
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-800">
@@ -89,14 +90,7 @@ const TaskList: React.FC = () => {
           onClick={() => setIsModalOpen(true)} // Open profile modal on click
           className="flex items-center justify-center bg-gray-100 p-2 rounded-full hover:bg-gray-200 transition"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-            className="w-8 h-8 text-gray-700"
-          >
-            <path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5zm0 2c-2.673 0-8 1.342-8 4v2h16v-2c0-2.658-5.327-4-8-4z" />
-          </svg>
+          <ProfileIcon className="w-8 h-8 text-gray-700" />
         </button>
       </div>
 
@@ -126,13 +120,13 @@ const TaskList: React.FC = () => {
               </p>
               <div className="flex justify-end space-x-4">
                 <button
-                  onClick={() => setIsModalOpen(false)} // Close modal on click
+                  onClick={() => setIsModalOpen(false)} 
                   className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition"
                 >
                   Close
                 </button>
                 <button
-                  onClick={logout} // Call logout function
+                  onClick={logout}
                   className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
                 >
                   Logout
@@ -160,18 +154,7 @@ const TaskList: React.FC = () => {
             <option value="date-asc">Oldest</option>
           </select>
           <div className="absolute inset-y-0 right-2 flex items-center pointer-events-none">
-            <svg
-              className="w-4 h-4 text-gray-500"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4 4a.75.75 0 01-1.06 0l-4-4a.75.75 0 01.02-1.06z"
-                clipRule="evenodd"
-              />
-            </svg>
+            <DropdownArrowIcon className="w-4 h-4 text-gray-500" />
           </div>
         </div>
 

@@ -7,7 +7,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onDelete, onToggle }) => {
     <div
       className={`bg-white shadow-md rounded-lg p-4 flex flex-col justify-between hover:shadow-xl hover:scale-105 transition-transform duration-200 ease-in-out ${
         task.completed ? "opacity-50" : ""
-      }`}
+      } h-48`}
     >
       <div className="mb-4 flex items-center justify-between">
         <h2

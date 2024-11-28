@@ -1,17 +1,8 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useState, useEffect } from 'react';
-import { User } from '../types/types';
+import { AuthContextType, User } from '../types/types';
 import { useNavigate } from 'react-router-dom';
 import ConfirmationModal from '../components/ConfirmationModal'; // Import the modal
-
-// Define the context type
-interface AuthContextType {
-  user: User | null;
-  login: (user: User) => void;
-  logout: () => void;
-  isAuthenticated: boolean;
-  loading: boolean;
-}
 
 // Create the AuthContext
 export const AuthContext = createContext<AuthContextType | null>(null);
@@ -48,7 +39,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   // Function to confirm logout
   const handleConfirmLogout = () => {
     setUser(null);
-    localStorage.removeItem('user'); // Remove authentication state only
+    localStorage.removeItem('user'); // Remove only the authentication state 
     setIsLogoutModalOpen(false);
     navigate('/login');
   };

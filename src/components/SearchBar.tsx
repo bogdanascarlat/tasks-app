@@ -15,7 +15,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ value, onChange }) => {
       {/* Clear button */}
       {value && (
         <button
-          onClick={() => onChange("")} // Clear the search bar value
+          onClick={() => onChange("")} 
           className="absolute inset-y-0 right-2 flex items-center justify-center text-gray-500 hover:text-gray-700 focus:outline-none"
         >
           ✕

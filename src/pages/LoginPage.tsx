@@ -1,35 +1,28 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import { getAccounts } from "../utils/storage";
 import { User } from "../types/types";
+import Button from "../components/Button";
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState<string>("");
-  const [storedAccounts, setStoredAccounts] = useState<User[]>([]);
   const [error, setError] = useState<string>("");
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  // Load accounts from localStorage on component mount
-  useEffect(() => {
-    const accounts = localStorage.getItem("accounts");
-    if (accounts) {
-      setStoredAccounts(JSON.parse(accounts));
-    }
-  }, []);
-
   // Handle form submission
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
 
-    if (!email) {
+    if (!email.trim()) {
       setError("Please enter your email.");
       return;
     }
 
-    // Check if the account exists
-    const account = storedAccounts.find((acc) => acc.email === email);
+    const accounts = getAccounts();
+    const account = accounts.find((acc: User) => acc.email === email);
 
     if (account) {
       login(account);
@@ -54,20 +47,14 @@ const LoginPage: React.FC = () => {
               type="email"
               id="email"
               value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                setError("");
-              }}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
             {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
           </div>
-          <button
-            type="submit"
-            className="w-full py-2 px-4 text-white bg-blue-600 rounded hover:bg-blue-700 hover:scale-105 transition duration-200 focus:outline-none"
-          >
+          <Button type="submit" variant="primary">
             Login
-          </button>
+          </Button>
         </form>
         <p className="mt-4 text-center text-sm text-gray-600">
           No account?{" "}

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { User } from "../types/types";
 import { Link, useNavigate } from "react-router-dom";
+import { validateEmail, validateNonEmptyFields } from "../utils/validators";
+import Button from "../components/Button";
 
 const RegisterForm: React.FC = () => {
   const [formData, setFormData] = useState<User>({
@@ -9,7 +11,6 @@ const RegisterForm: React.FC = () => {
     email: "",
   });
   const navigate = useNavigate();
-
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
@@ -19,21 +20,17 @@ const RegisterForm: React.FC = () => {
     setSuccess(null);
   };
 
-  const validateEmail = (email: string) => {
-    const regex = /^\S+@\S+\.\S+$/;
-    return regex.test(email);
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
 
     // Validations
-    if (Object.values(formData).some((field) => field.trim() === "")) {
+    if (!validateNonEmptyFields(formData)) {
       setError("All fields are required.");
       return;
     }
+
     if (!validateEmail(formData.email)) {
       setError("Invalid e-mail address.");
       return;
@@ -44,11 +41,12 @@ const RegisterForm: React.FC = () => {
     const accounts: User[] = storedAccounts ? JSON.parse(storedAccounts) : [];
 
     // Check if email already exists
-    const emailExists = accounts.some(
-      (account) => account.email.toLowerCase() === formData.email.toLowerCase()
-    );
-
-    if (emailExists) {
+    if (
+      accounts.some(
+        (account) =>
+          account.email.toLowerCase() === formData.email.toLowerCase()
+      )
+    ) {
       setError("The account is already created.");
       return;
     }
@@ -125,12 +123,9 @@ const RegisterForm: React.FC = () => {
               className="w-full px-4 py-2 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
             />
           </div>
-          <button
-            type="submit"
-            className="w-full px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none"
-          >
+          <Button type="submit" variant="primary" onClick={handleSubmit}>
             Register
-          </button>
+          </Button>
         </form>
         <p className="mt-4 text-sm text-center text-gray-600">
           Do you have an account?{" "}

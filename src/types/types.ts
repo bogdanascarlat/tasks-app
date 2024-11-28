@@ -9,7 +9,7 @@ export interface Task {
   title: string;
   description?: string;
   createDate: string;
-  completed: boolean; 
+  completed: boolean;
   priority: "High" | "Medium" | "Low";
 }
 
@@ -26,19 +26,27 @@ export interface ConfirmationModalProps {
 export interface TasksContextProps {
   tasks: Task[];
   loading: boolean;
-  addTask: (task: Task) => Promise<void>;
-  updateTask: (task: Task) => Promise<void>;
-  deleteTask: (id: string) => Promise<void>;
+  addTask: (task: Task) => void;
+  updateTask: (task: Task) => void;
+  deleteTask: (id: string) => void;
   toggleTaskCompletion: (id: string) => void;
 }
 
 export interface TaskItemProps {
   task: Task;
   onDelete: (id: string) => void;
-  onToggle: () => void; 
+  onToggle: () => void;
 }
 
 export interface SearchBarProps {
   value: string;
   onChange: (value: string) => void;
+}
+
+export interface AuthContextType {
+  user: User | null;
+  login: (user: User) => void;
+  logout: () => void;
+  isAuthenticated: boolean;
+  loading: boolean;
 }
