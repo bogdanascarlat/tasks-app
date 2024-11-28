@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import { getAccounts } from "../utils/storage";
-import { User } from "../types/types";
+import { validateEmail } from "../utils/validators";
 import Button from "../components/Button";
+import FormField from "../components/FormField";
+import Alert from "../components/Alert";
+import { findAccountByEmail } from "../utils/storage";
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -11,18 +13,16 @@ const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  // Handle form submission
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
 
-    if (!email.trim()) {
-      setError("Please enter your email.");
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email.");
       return;
     }
 
-    const accounts = getAccounts();
-    const account = accounts.find((acc: User) => acc.email === email);
+    const account = findAccountByEmail(email);
 
     if (account) {
       login(account);
@@ -39,24 +39,21 @@ const LoginPage: React.FC = () => {
           Login
         </h2>
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="email" className="block text-sm text-gray-600 mb-2">
-              E-mail address
-            </label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            />
-            {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
-          </div>
+          <FormField
+            id="email"
+            name="email"
+            value={email}
+            label="E-mail address"
+            type="email"
+            placeholder="Enter your email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          {error && <Alert type="error" message={error} />}
           <Button type="submit" variant="primary">
             Login
           </Button>
         </form>
-        <p className="mt-4 text-center text-sm text-gray-600">
+        <p className="mt-4 text-sm text-center text-gray-600">
           No account?{" "}
           <Link to="/register" className="text-blue-600 hover:underline">
             Register here

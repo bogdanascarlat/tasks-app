@@ -1,15 +1,5 @@
 import React from "react";
-
-interface ButtonProps {
-  children: React.ReactNode;
-  onClick?: (
-    e: React.MouseEvent<HTMLButtonElement> | React.FormEvent<HTMLButtonElement>
-  ) => void;
-  type?: "button" | "submit" | "reset";
-  variant?: "primary" | "secondary" | "danger";
-  disabled?: boolean;
-  loading?: boolean;
-}
+import { ButtonProps } from "../types/types";
 
 const Button: React.FC<ButtonProps> = ({
   children,

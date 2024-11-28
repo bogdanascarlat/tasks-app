@@ -1,84 +1,17 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useEffect } from "react";
-import { Task } from "../types/types";
-import { useParams, useNavigate } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
-import { useTasks } from "../hooks/useTasks";
+import React from "react";
 import { motion } from "framer-motion";
+import { useTaskForm } from "../hooks/useTaskForm";
 
 const TaskForm: React.FC = () => {
-  const { tasks, addTask, updateTask } = useTasks();
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-
-  const [formData, setFormData] = useState<Task>({
-    id: "",
-    title: "",
-    description: "",
-    createDate: "",
-    completed: false,
-    priority: "Medium", 
-  });
-
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
-
-  // Fetch task data if editing an existing task
-  useEffect(() => {
-    if (id) {
-      const taskToEdit = tasks.find((task) => task.id === id);
-      if (taskToEdit) {
-        setFormData(taskToEdit);
-      }
-    }
-  }, [id, tasks]);
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    setError(null);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSaving(true);
-    setError(null);
-    setSuccess(null);
-
-    try {
-      if (!formData.title.trim()) {
-        throw new Error("Title is required.");
-      }
-
-      if (id) {
-        await updateTask(formData);
-        setSuccess("Task updated successfully!");
-      } else {
-        await addTask({
-          ...formData,
-          id: uuidv4(),
-          createDate: new Date().toISOString(),
-        });
-        setSuccess("Task added successfully!");
-      }
-
-      // Redirect to the task list after success
-      setTimeout(() => {
-        navigate("/tasks");
-      }, 1500);
-    } catch (err: any) {
-      setError(err.message || "An error occurred while saving the task.");
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  // Navigate back to the task list without saving
-  const handleCancel = () => {
-    navigate("/tasks");
-  };
+  const {
+    formData,
+    saving,
+    error,
+    success,
+    handleChange,
+    handleSubmit,
+    handleCancel,
+  } = useTaskForm();
 
   return (
     <motion.div
@@ -95,10 +28,9 @@ const TaskForm: React.FC = () => {
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
         <h2 className="text-3xl font-bold text-center text-gray-700 mb-6">
-          {id ? "Edit Task" : "Create Task"}
+          {formData.id ? "Edit Task" : "Create Task"}
         </h2>
 
-        {/* Success and error messages */}
         {success && (
           <motion.div
             className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4"

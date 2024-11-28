@@ -1,53 +1,34 @@
 /* eslint-disable react-refresh/only-export-components */
-import React, { createContext, useState, useEffect } from 'react';
-import { AuthContextType, User } from '../types/types';
-import { useNavigate } from 'react-router-dom';
-import ConfirmationModal from '../components/ConfirmationModal'; // Import the modal
+import React, { createContext } from "react";
+import { AuthContextType, User } from "../types/types";
+import { useNavigate } from "react-router-dom";
+import useAuthState from "../hooks/useAuthState";
+import useLogoutModal from "../hooks/useLogoutModal";
+import ConfirmationModal from "../components/ConfirmationModal";
 
-// Create the AuthContext
 export const AuthContext = createContext<AuthContextType | null>(null);
 
-// Create the AuthProvider component
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState<boolean>(false); // State for modal
+  const { user, setUser, loading } = useAuthState();
   const navigate = useNavigate();
 
-  // Load the authentication state from localStorage on component mount
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user'); // Authentication state
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    setLoading(false);
-  }, []);
-
-  // Function to handle login
   const login = (user: User) => {
     setUser(user);
-    localStorage.setItem('user', JSON.stringify(user)); // Save authentication state
+    localStorage.setItem("user", JSON.stringify(user));
   };
 
-  // Function to handle logout
-  const logout = () => {
-    setIsLogoutModalOpen(true); 
-  };
-
-  // Function to confirm logout
   const handleConfirmLogout = () => {
     setUser(null);
-    localStorage.removeItem('user'); // Remove only the authentication state 
-    setIsLogoutModalOpen(false);
-    navigate('/login');
+    localStorage.removeItem("user");
+    navigate("/login");
   };
 
-  // Function to cancel logout
-  const handleCancelLogout = () => {
-    setIsLogoutModalOpen(false);
-  };
+  const { isModalOpen, openModal, closeModal, confirmLogout } =
+    useLogoutModal(handleConfirmLogout);
+
+  const logout = () => openModal();
 
   const isAuthenticated = !!user;
 
@@ -57,13 +38,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     >
       {children}
       <ConfirmationModal
-        isOpen={isLogoutModalOpen}
+        isOpen={isModalOpen}
         title="Logout Confirmation"
         message="Are you sure you want to logout?"
         confirmText="Logout"
         cancelText="Cancel"
-        onConfirm={handleConfirmLogout}
-        onCancel={handleCancelLogout}
+        onConfirm={confirmLogout}
+        onCancel={closeModal}
       />
     </AuthContext.Provider>
   );

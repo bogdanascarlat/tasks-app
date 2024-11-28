@@ -1,6 +1,7 @@
-import React, { useEffect, memo } from "react";
+import React, { memo } from "react";
 import { ConfirmationModalProps } from "../types/types";
 import Button from "./Button";
+import useEscapeKey from "../hooks/useEscapeKey";
 
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   isOpen,
@@ -12,15 +13,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   onCancel,
 }) => {
   // Handle keyboard events
-  useEffect(() => {
-    const handleKeydown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isOpen) {
-        onCancel();
-      }
-    };
-    window.addEventListener("keydown", handleKeydown);
-    return () => window.removeEventListener("keydown", handleKeydown);
-  }, [isOpen, onCancel]);
+  useEscapeKey(onCancel, isOpen);
 
   if (!isOpen) return null;
 

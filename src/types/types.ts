@@ -50,3 +50,26 @@ export interface AuthContextType {
   isAuthenticated: boolean;
   loading: boolean;
 }
+
+export interface ButtonProps {
+  children: React.ReactNode;
+  onClick?: (
+    e: React.MouseEvent<HTMLButtonElement> | React.FormEvent<HTMLButtonElement>
+  ) => void;
+  type?: "button" | "submit" | "reset";
+  variant?: "primary" | "secondary" | "danger";
+  disabled?: boolean;
+  loading?: boolean;
+}
+
+export type FormFieldProps = {
+  id: string;
+  name: string;
+  value: string;
+  label: string;
+  placeholder: string;
+  type?: string;
+  required?: boolean;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; 
+};
+

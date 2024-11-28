@@ -5,7 +5,7 @@ import RegisterForm from "./pages/RegisterForm";
 import LoginPage from "./pages/LoginPage";
 import TaskList from "./pages/TaskList";
 import TaskForm from "./pages/TaskForm";
-import PrivateRoute from "./hoc/PrivateRoute";
+import PrivateRoute from "./routes/PrivateRoute";
 
 function App() {
   return (

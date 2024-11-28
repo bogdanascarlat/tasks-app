@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import { User } from "../types/types";
 import { Link, useNavigate } from "react-router-dom";
+import { User } from "../types/types";
+import { accountExists, getAccounts, saveToLocalStorage } from "../utils/storage";
 import { validateEmail, validateNonEmptyFields } from "../utils/validators";
 import Button from "../components/Button";
+import FormField from "../components/FormField";
+import Alert from "../components/Alert";
 
 const RegisterForm: React.FC = () => {
   const [formData, setFormData] = useState<User>({
@@ -36,32 +39,17 @@ const RegisterForm: React.FC = () => {
       return;
     }
 
-    // Retrieve existing accounts from localStorage
-    const storedAccounts = localStorage.getItem("accounts");
-    const accounts: User[] = storedAccounts ? JSON.parse(storedAccounts) : [];
-
-    // Check if email already exists
-    if (
-      accounts.some(
-        (account) =>
-          account.email.toLowerCase() === formData.email.toLowerCase()
-      )
-    ) {
+    if (accountExists(formData.email)) {
       setError("The account is already created.");
       return;
     }
 
-    // Add new account to accounts array
-    accounts.push(formData);
-    localStorage.setItem("accounts", JSON.stringify(accounts));
+    // Add new account
+    const accounts = getAccounts();
+    saveToLocalStorage("accounts", [...accounts, formData]);
 
-    // Display success message
     setSuccess("Registration successful! You can now log in.");
-
-    // Redirect to login page after a short delay
-    setTimeout(() => {
-      navigate("/login");
-    }, 1600);
+    setTimeout(() => navigate("/login"), 1600);
   };
 
   return (
@@ -70,60 +58,35 @@ const RegisterForm: React.FC = () => {
         <h2 className="mb-6 text-3xl font-bold text-center text-gray-700">
           Register
         </h2>
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-            {error}
-          </div>
-        )}
-        {success && (
-          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4 transition-opacity duration-500">
-            {success}
-          </div>
-        )}
+        {error && <Alert type="error" message={error} />}
+        {success && <Alert type="success" message={success} />}
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="fname" className="block mb-1 text-sm text-gray-600">
-              First name
-            </label>
-            <input
-              type="text"
-              name="fname"
-              id="fname"
-              value={formData.fname}
-              onChange={handleChange}
-              placeholder="Type your first name"
-              className="w-full px-4 py-2 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="lname" className="block mb-1 text-sm text-gray-600">
-              Last name
-            </label>
-            <input
-              type="text"
-              name="lname"
-              id="lname"
-              value={formData.lname}
-              onChange={handleChange}
-              placeholder="Type your last name"
-              className="w-full px-4 py-2 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="email" className="block mb-1 text-sm text-gray-600">
-              E-mail address
-            </label>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Type your e-mail address"
-              className="w-full px-4 py-2 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
-            />
-          </div>
-          <Button type="submit" variant="primary" onClick={handleSubmit}>
+          <FormField
+            id="fname"
+            name="fname"
+            value={formData.fname}
+            label="First Name"
+            placeholder="Type your first name"
+            onChange={handleChange}
+          />
+          <FormField
+            id="lname"
+            name="lname"
+            value={formData.lname}
+            label="Last Name"
+            placeholder="Type your last name"
+            onChange={handleChange}
+          />
+          <FormField
+            id="email"
+            name="email"
+            value={formData.email}
+            label="E-mail address"
+            placeholder="Type your e-mail address"
+            type="email"
+            onChange={handleChange}
+          />
+          <Button type="submit" variant="primary">
             Register
           </Button>
         </form>
