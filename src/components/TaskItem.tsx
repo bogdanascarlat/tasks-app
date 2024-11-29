@@ -48,13 +48,18 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onDelete, onToggle }) => {
       <div className="flex items-center justify-between mt-4">
         <Link
           to={`/tasks/edit/${task.id}`}
-          className="text-green-500 font-medium px-3 py-1 rounded-md hover:text-green-600 hover:bg-green-100 transition duration-200"
+          className={`text-green-500 font-medium px-3 py-1 rounded-md hover:text-green-600 hover:bg-green-100 transition duration-200 ${
+            task.completed ? "pointer-events-none opacity-50" : ""
+          }`}
         >
           Edit
         </Link>
         <button
           onClick={() => onDelete(task.id)}
-          className="text-red-500 font-medium px-3 py-1 rounded-md hover:text-red-600 hover:bg-red-100 transition duration-200"
+          className={`text-red-500 font-medium px-3 py-1 rounded-md hover:text-red-600 hover:bg-red-100 transition duration-200 ${
+            task.completed ? "pointer-events-none opacity-50" : ""
+          }`}
+          disabled={task.completed}
         >
           Delete
         </button>

@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { User } from "../types/types";
+import { User } from "../../types/types";
 import {
   accountExists,
   getAccounts,
   saveToLocalStorage,
-} from "../utils/storage";
-import { validateEmail, validateNonEmptyFields } from "../utils/validators";
+} from "../../utils/storage";
+import { validateEmail, validateNonEmptyFields } from "../../utils/validators";
 import { useNavigate } from "react-router-dom";
 
 //Manages the registration

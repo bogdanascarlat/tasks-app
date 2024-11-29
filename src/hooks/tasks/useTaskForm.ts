@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from "react";
-import { Task } from "../types/types";
-import { useTasks } from "../hooks/useTasks";
+import { Task } from "../../types/types";
+import { useTasks } from "./useTasks";
 import { useNavigate, useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 

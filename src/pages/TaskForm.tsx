@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { useTaskForm } from "../hooks/useTaskForm";
+import { useTaskForm } from "../hooks/tasks/useTaskForm";
 
 const TaskForm: React.FC = () => {
   const {
@@ -12,6 +12,37 @@ const TaskForm: React.FC = () => {
     handleSubmit,
     handleCancel,
   } = useTaskForm();
+
+  const [isTitleInvalid, setIsTitleInvalid] = useState(false);
+
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value } = e.target;
+
+    // Update the form data
+    handleChange(e);
+
+    // If the field is "title" and the value is not empty, reset the invalid state
+    if (name === "title" && value.trim()) {
+      setIsTitleInvalid(false);
+    }
+  };
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Check if the title is empty
+    if (!formData.title.trim()) {
+      setIsTitleInvalid(true);
+      return;
+    }
+
+    setIsTitleInvalid(false); // Reset the invalid state if the title is valid
+    handleSubmit(e); // Proceed with the original submit logic
+  };
 
   return (
     <motion.div
@@ -52,7 +83,7 @@ const TaskForm: React.FC = () => {
           </motion.div>
         )}
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleFormSubmit}>
           <div className="mb-4">
             <label
               htmlFor="title"
@@ -65,10 +96,17 @@ const TaskForm: React.FC = () => {
               id="title"
               name="title"
               value={formData.title}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              onChange={handleInputChange}
+              className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 ${
+                isTitleInvalid
+                  ? "border-red-500 focus:ring-red-500"
+                  : "focus:ring-blue-500"
+              }`}
               placeholder="Enter task title"
             />
+            {isTitleInvalid && (
+              <p className="text-sm text-red-500 mt-1">Title is required.</p>
+            )}
           </div>
 
           <div className="mb-4">
@@ -82,7 +120,7 @@ const TaskForm: React.FC = () => {
               id="description"
               name="description"
               value={formData.description}
-              onChange={handleChange}
+              onChange={handleInputChange}
               className="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
               placeholder="Enter task description"
               rows={4}
@@ -100,7 +138,7 @@ const TaskForm: React.FC = () => {
               id="priority"
               name="priority"
               value={formData.priority}
-              onChange={handleChange}
+              onChange={handleInputChange}
               className="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
             >
               <option value="High">High</option>

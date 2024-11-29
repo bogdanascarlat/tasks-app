@@ -70,6 +70,11 @@ export type FormFieldProps = {
   placeholder: string;
   type?: string;
   required?: boolean;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; 
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
+export interface SortOption {
+  field: keyof Task | "priority";
+  fieldType: "date" | "number" | "string" | "boolean" | "priority";
+  order: "asc" | "desc";
+}

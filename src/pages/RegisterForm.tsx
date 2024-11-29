@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { User } from "../types/types";
-import { accountExists, getAccounts, saveToLocalStorage } from "../utils/storage";
+import {
+  accountExists,
+  getAccounts,
+  saveToLocalStorage,
+} from "../utils/storage";
 import { validateEmail, validateNonEmptyFields } from "../utils/validators";
 import Button from "../components/Button";
 import FormField from "../components/FormField";
 import Alert from "../components/Alert";
+import AppHeader from "../components/AppHeader";
 
 const RegisterForm: React.FC = () => {
   const [formData, setFormData] = useState<User>({
@@ -55,6 +60,7 @@ const RegisterForm: React.FC = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
+        <AppHeader />
         <h2 className="mb-6 text-3xl font-bold text-center text-gray-700">
           Register
         </h2>
