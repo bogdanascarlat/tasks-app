@@ -1,6 +1,7 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Button from "./Button";
+import useEscapeKey from "../hooks/utils/useEscapeKey";
 
 interface ProfileModalProps {
   isOpen: boolean;
@@ -15,6 +16,8 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
   onClose,
   onLogout,
 }) => {
+  useEscapeKey(onClose, isOpen);
+
   return (
     <AnimatePresence>
       {isOpen && (
