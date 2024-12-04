@@ -33,6 +33,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     navigate("/login");
   };
 
+  // const isAuthenticated = Boolean(user);
   const isAuthenticated = !!user;
 
   return (
