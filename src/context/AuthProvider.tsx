@@ -2,6 +2,7 @@
 import React, { createContext, useState, useEffect } from "react";
 import { AuthContextType, User } from "../types/types";
 import { useNavigate } from "react-router-dom";
+import { removeFromLocalStorage } from "../utils/storage";
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
@@ -28,7 +29,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem("user");
+    removeFromLocalStorage("user");
     navigate("/login");
   };
 
